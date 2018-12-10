@@ -21,7 +21,7 @@ def kFolds(data, k=1):
     binSize = int(dataSize / k)
     remainSize = dataSize % k
 
-    np.random.shuffle(data)
+    # np.random.shuffle(data)
 
     for i in range(k):
         trainSet[i].extend(data[0:(i)*binSize])
