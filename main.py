@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import preprocess as pp
 
 def preprocessData(file='AirQualityUCI.xlsx'):
     data = pd.read_excel(file).values
@@ -9,4 +10,7 @@ def preprocessData(file='AirQualityUCI.xlsx'):
     np.savetxt('processedData.txt', pData, fmt='%.13f')
 
 if __name__ == '__main__':
-    pass
+    trainSet, testSet = pp.kFolds(pp.input('processedData.txt'), 10)
+
+    print(trainSet.shape)
+    print(testSet.shape)
