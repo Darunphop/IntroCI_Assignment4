@@ -4,7 +4,7 @@ from scipy import stats
 def input(input):
     res = []
     with open(input, 'r') as inputFile:
-        res = np.asarray([line.rstrip().split(',') for line in inputFile])
+        res = np.asarray([list(map(float, line.rstrip().split(' '))) for line in inputFile])
     return res
 
 def preprocess(data):
