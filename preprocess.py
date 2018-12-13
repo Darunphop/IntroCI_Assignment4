@@ -9,9 +9,11 @@ def input(input):
 
 def preprocess(data):
     feature = stats.zscore(data[:,:-2],axis=0)
-    output = s
+    output = data[:,-2:] / 100.0
     # data[:,1:] = stats.zscore(data[:,1:],axis=0)
-    return data
+    # print(feature.shape)
+    # print(output.shape)
+    return np.concatenate((feature,output), axis=1)
 
 def kFolds(data, k=1):
     trainSet = [[] for i in range(k)]
