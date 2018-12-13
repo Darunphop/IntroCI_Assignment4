@@ -25,6 +25,13 @@ class ParticleSwarm:
                 self.fitness = self.fitFunc[0](o[-1],data[1])
                 self.timeStamp = _timeStamp
 
+        def getWDiff(self, _w):
+            res = []
+            for i in range(len(self.w)):
+                tmp = _w[i] - self.w[i]
+                res.append(tmp)
+            return res
+
     def __init__(self, fitnessFunc, initFunc, testData, seed, nPopulation):
         self.population = []
         self.fitnessFunc = fitnessFunc
