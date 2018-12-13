@@ -4,7 +4,7 @@ import MLP
 class ParticleSwarm:
     class Node:
         def __init__(self, _id,  _w, _fitFunc, _act):
-            self.neighbor = []
+            self.neighbor = [self]
             self.w = _w
             self.speed = 0
             self.id = _id
@@ -15,7 +15,7 @@ class ParticleSwarm:
             self.timeStamp = 0
 
         def pairNeighbor(self, tNode):
-            if tNode.id not in self.neighbor:
+            if tNode not in self.neighbor and tNode is not self:
                 self.neighbor.append(tNode)
                 tNode.neighbor.append(self)
 
@@ -58,6 +58,14 @@ class ParticleSwarm:
             w,_,act = MLP.modelInit(self.model)
             n = self.Node(i,w,fitnessFunc,act)
             self.population.append(n)
+
+    def defineTopology(self, connections):
+        for i in range(self.nPopulation):
+            for j in connections:
+                target = (i + j) % self.nPopulation
+                self.population[i].pairNeighbor(self.population[target])
+
+
 
 if __name__ == '__main__':
     pass
