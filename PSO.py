@@ -12,7 +12,11 @@ class ParticleSwarm:
             self.fitFunc = _fitFunc
             self.act = _act
             self.fitness = 0
-            self.timeStamp = 0
+            self.timeStamp = -1
+            self.v = []
+
+            for i in range(len(_w)):
+                self.v.append(np.zeros(_w[i].shape))
 
         def pairNeighbor(self, tNode):
             if tNode not in self.neighbor and tNode is not self:
@@ -44,6 +48,20 @@ class ParticleSwarm:
                     lbestn = i.w
             return [lbestf, lbestn]
 
+        def updateVelocity(self, c1=1, c2=1):
+            r1 = np.random.rand()
+            r2 = np.random.rand()
+            cognitive = [(r1*c1)*l for l in self.getWDiff(self.pBest[1])]
+            social = [(r2*c2)*(l) for l in self.getWDiff(self.getLBest()[1])]
+            # self.v = self.v + cognitive + social
+            self.v = [self.v[i] + cognitive[i] + social[i] for i in range(len(self.v))]
+
+        # def wMult(self, k, _w):
+        #     res = []
+        #     for i in _w:
+        #         res.append(k*i)
+        #     return
+
     def __init__(self, fitnessFunc, initFunc, testData, seed, nPopulation):
         self.population = []
         self.fitnessFunc = fitnessFunc
@@ -65,6 +83,35 @@ class ParticleSwarm:
                 target = (i + j) % self.nPopulation
                 self.population[i].pairNeighbor(self.population[target])
 
+    def run(self, maxIt):
+
+        for i in range(maxIt):
+            self.updateFitness(i)
+            
+            iGbest = self.getGBest()
+            if self.gBest[0] < iGbest[0]:
+                self.gBest = iGbest
+            
+            # print(self.population[0].v)
+            self.updateVelocity()
+            # print('\n', self.population[0].v)
+
+    def updateFitness(self, _it):
+        for n in self.population:
+            n.updateFitness(self.testData, _it)
+    
+    def updateVelocity(self):
+        for n in self.population:
+            n.updateVelocity()
+
+    def getGBest(self, allTime=True):
+        gbestv = 0
+        gbestw = []
+        for n in self.population:
+            if n.fitness > gbestv:
+                gbestv = n.fitness
+                gbestw = n.w
+        return [gbestv, gbestw]
 
 
 if __name__ == '__main__':
