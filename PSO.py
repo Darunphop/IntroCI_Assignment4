@@ -16,13 +16,13 @@ class ParticleSwarm:
 
         def pairNeighbor(self, tNode):
             if tNode.id not in self.neighbor:
-                self.neighbor.append(tNode.id)
-                tNode.neighbor.append(self.id)
+                self.neighbor.append(tNode)
+                tNode.neighbor.append(self)
 
         def updateFitness(self, data, _timeStamp):
             if self.timeStamp < _timeStamp:
                 o = self.fitFunc[1](data[0],self.w,0,self.act)
-                self.fitness = self.fitFunc[0](o[-1],data[1])
+                self.fitness = 1.0 / self.fitFunc[0](o[-1],data[1])
                 self.timeStamp = _timeStamp
 
         def getWDiff(self, _w):
@@ -31,6 +31,15 @@ class ParticleSwarm:
                 tmp = _w[i] - self.w[i]
                 res.append(tmp)
             return res
+
+        def getLBest(self):
+            lbestf = 0
+            lbestn = []
+            for i in self.neighbor:
+                if i.fitness > lbestf:
+                    lbestf = i.fitness
+                    lbestn = i.w
+            return [lbestf, lbestn]
 
     def __init__(self, fitnessFunc, initFunc, testData, seed, nPopulation):
         self.population = []
