@@ -53,14 +53,11 @@ class ParticleSwarm:
             r2 = np.random.rand()
             cognitive = [(r1*c1)*l for l in self.getWDiff(self.pBest[1])]
             social = [(r2*c2)*(l) for l in self.getWDiff(self.getLBest()[1])]
-            # self.v = self.v + cognitive + social
             self.v = [self.v[i] + cognitive[i] + social[i] for i in range(len(self.v))]
 
-        # def wMult(self, k, _w):
-        #     res = []
-        #     for i in _w:
-        #         res.append(k*i)
-        #     return
+        def updatePosition(self):
+            newW = [self.w[i] + self.v[i] for i in range(len(self.w))]
+            self.w = newW
 
     def __init__(self, fitnessFunc, initFunc, testData, seed, nPopulation):
         self.population = []
@@ -92,9 +89,12 @@ class ParticleSwarm:
             if self.gBest[0] < iGbest[0]:
                 self.gBest = iGbest
             
-            # print(self.population[0].v)
+
             self.updateVelocity()
-            # print('\n', self.population[0].v)
+            self.updatePosition()
+
+            print(i, self.gBest[0], iGbest[0])
+
 
     def updateFitness(self, _it):
         for n in self.population:
@@ -103,6 +103,10 @@ class ParticleSwarm:
     def updateVelocity(self):
         for n in self.population:
             n.updateVelocity()
+
+    def updatePosition(self):
+        for n in self.population:
+            n.updatePosition()
 
     def getGBest(self, allTime=True):
         gbestv = 0
