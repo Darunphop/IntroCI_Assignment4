@@ -22,7 +22,10 @@ class ParticleSwarm:
         def updateFitness(self, data, _timeStamp):
             if self.timeStamp < _timeStamp:
                 o = self.fitFunc[1](data[0],self.w,0,self.act)
-                self.fitness = 1.0 / self.fitFunc[0](o[-1],data[1])
+                fitness = 1.0 / self.fitFunc[0](o[-1],data[1])
+                if fitness > self.pBest[0]:
+                    self.pBest = [fitness, self.w]
+                self.fitness = fitness
                 self.timeStamp = _timeStamp
 
         def getWDiff(self, _w):
