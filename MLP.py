@@ -39,7 +39,7 @@ def classInterprete(y):
     return (y[:,0] <= y[:,1]).astype(int)
 
 def getError(y, d):
-    a = classInterprete(y)
-    b = d.astype(int)
+    
+    diff = abs(d - y)
 
-    return (a==b).astype(int).sum() / b.shape[0]
+    return np.average(np.sum(diff,axis=1))
