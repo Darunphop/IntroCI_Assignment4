@@ -21,10 +21,14 @@ def preprocessData(file='AirQualityUCI.xlsx'):
 if __name__ == '__main__':
     model = '8x-5t-3t-2l'
     k = 10
-    trainSet, testSet = pp.kFolds(pp.input('processedData.txt'), k)
+    populationSize = 1
+    data = pp.preprocess(pp.input('processedData.txt'))
+    trainSet, testSet = pp.kFolds(data, k)
 
     print(trainSet.shape)
     print(testSet.shape)
 
-    for i in range(k):
-        pso = PSO.ParticleSwarm((MLP.getError, MLP.feedForward), MLP.modelInit, (trainSet[i][:,:-2],trainSet[i][:,-2:]), model, 1)
+    # for i in range(k):
+    #     if i == 1:
+    #         pso = PSO.ParticleSwarm((MLP.getError, MLP.feedForward), MLP.modelInit, (trainSet[i][:,:-2],trainSet[i][:,-2:]), model, populationSize)
+    #         print(pso.testData[1][0])
