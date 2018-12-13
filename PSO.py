@@ -38,6 +38,7 @@ class ParticleSwarm:
         for i in range(nPopulation):
             w,_,act = MLP.modelInit(self.model)
             n = self.Node(i,w,fitnessFunc,act)
+            self.population.append(n)
 
 if __name__ == '__main__':
     pass
