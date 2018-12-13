@@ -48,7 +48,7 @@ class ParticleSwarm:
                     lbestn = i.w
             return [lbestf, lbestn]
 
-        def updateVelocity(self, c1=1, c2=1):
+        def updateVelocity(self, c1=2, c2=0.5):
             r1 = np.random.rand()
             r2 = np.random.rand()
             cognitive = [(r1*c1)*l for l in self.getWDiff(self.pBest[1])]
@@ -67,7 +67,7 @@ class ParticleSwarm:
         self.model = seed
         self.nPopulation = nPopulation
         self.gBest = [0,0]
-        self.it = 0
+        self.it = []
 
         for i in range(nPopulation):
             w,_,act = MLP.modelInit(self.model)
@@ -81,7 +81,7 @@ class ParticleSwarm:
                 self.population[i].pairNeighbor(self.population[target])
 
     def run(self, maxIt):
-
+        iGbest = [0,0]
         for i in range(maxIt):
             self.updateFitness(i)
             
@@ -89,11 +89,14 @@ class ParticleSwarm:
             if self.gBest[0] < iGbest[0]:
                 self.gBest = iGbest
             
+            self.it.append(iGbest[0])
 
             self.updateVelocity()
             self.updatePosition()
 
             print(i, self.gBest[0], iGbest[0])
+    
+        return self.gBest[1], iGbest[1]
 
 
     def updateFitness(self, _it):
