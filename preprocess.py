@@ -8,10 +8,9 @@ def input(input):
     return res
 
 def preprocess(data):
-    data = np.delete(data,0,1)
-    data[:,0] = (data[:,0] == 'M').astype(float)
-    data = data.astype(float)
-    data[:,1:] = stats.zscore(data[:,1:],axis=0)
+    feature = stats.zscore(data[:,:-2],axis=0)
+    output = s
+    # data[:,1:] = stats.zscore(data[:,1:],axis=0)
     return data
 
 def kFolds(data, k=1):
