@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import preprocess as pp
+import PSO
+import MLP
 
 def preprocessData(file='AirQualityUCI.xlsx'):
     data = pd.read_excel(file).values
@@ -17,9 +19,12 @@ def preprocessData(file='AirQualityUCI.xlsx'):
     np.savetxt('processedData.txt', pData, fmt='%.13f')
 
 if __name__ == '__main__':
-    trainSet, testSet = pp.kFolds(pp.input('processedData.txt'), 10)
+    model = '8x-5t-3t-2l'
+    k = 10
+    trainSet, testSet = pp.kFolds(pp.input('processedData.txt'), k)
 
     print(trainSet.shape)
     print(testSet.shape)
 
-    # preprocessData()
+    for i in range(k):
+        pso = PSO.ParticleSwarm((MLP.getError, MLP.feedForward), MLP.modelInit, (trainSet[i][:,:-2],trainSet[i][:,-2:]), model, 1)
